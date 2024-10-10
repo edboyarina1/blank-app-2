@@ -77,10 +77,6 @@ if "attempt_made" not in st.session_state:
 if "leaderboard" not in st.session_state:
     st.session_state.leaderboard = []
 
-# Кнопка для сброса попытки
-if st.button("Сбросить попытку / Reset Attempt"):
-    st.session_state.attempt_made = False
-
 # Если попытка еще не была сделана и имя введено
 if not st.session_state.attempt_made and name:
     # Ввод уровня IQ
