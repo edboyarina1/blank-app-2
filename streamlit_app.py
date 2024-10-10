@@ -41,7 +41,7 @@ if language == "Русский":
 
     **Победитель** — тот, кого приняли на работу и у кого в итоге осталось больше всего денег.
 
-    Введите желаемый уровень IQ и нажмите "Проверить результат". У вас всего одна попытка!
+    Введите желаемый уровень IQ и нажмите "Проверить результат". Попробуйте несколько раз!
 
     Удачи!
     """)
@@ -63,7 +63,7 @@ else:
 
     **The winner** is the one who gets hired and has the most money left.
 
-    Enter the desired IQ level and click "Check Result." You only have one attempt!
+    Enter the desired IQ level and click "Check Result." Try multiple times!
 
     Good luck!
     """)
@@ -71,30 +71,23 @@ else:
 # Поле для ввода имени
 name = st.text_input("Введите ваше имя / Enter your name")
 
-# Использование сессии для хранения попытки и рейтинга
-if "attempt_made" not in st.session_state:
-    st.session_state.attempt_made = False
+# Использование сессии для хранения рейтинга
 if "leaderboard" not in st.session_state:
     st.session_state.leaderboard = []
 
-# Если попытка еще не была сделана и имя введено
-if not st.session_state.attempt_made and name:
-    # Ввод уровня IQ
-    input_iq = st.number_input("Введите уровень IQ / Enter your IQ:", min_value=50, max_value=150, step=1)
+# Ввод уровня IQ
+input_iq = st.number_input("Введите уровень IQ / Enter your IQ:", min_value=50, max_value=150, step=1)
 
-    # Кнопка для проверки результата
-    if st.button("Проверить результат / Check Result"):
-        # Вычисление результата
-        result, earnings = simulate_job_application(input_iq)
+# Кнопка для проверки результата
+if st.button("Проверить результат / Check Result"):
+    # Вычисление результата
+    result, earnings = simulate_job_application(input_iq)
 
-        # Отображение результата
-        st.write(result)
+    # Отображение результата
+    st.write(result)
 
-        # Сохранение результата в рейтинг
-        st.session_state.leaderboard.append({"Имя": name, "Доход": earnings, "Время": datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
-
-        # Устанавливаем флаг, чтобы запретить повторный ввод
-        st.session_state.attempt_made = True
+    # Сохранение результата в рейтинг
+    st.session_state.leaderboard.append({"Имя": name, "Доход": earnings, "Время": datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
 
 # Вывод текущего рейтинга
 if st.session_state.leaderboard:
@@ -102,7 +95,7 @@ if st.session_state.leaderboard:
     df = pd.DataFrame(st.session_state.leaderboard)
     # Сортировка по доходу
     ranking = df.sort_values(by="Доход", ascending=False).reset_index(drop=True)
-    # Отображение таблицы с именами
+    # Отображение таблицы только с именами
     st.markdown("### Рейтинг / Leaderboard")
     st.table(ranking[["Имя"]])
 else:
